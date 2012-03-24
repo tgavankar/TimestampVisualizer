@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/gnujaxp.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/iText-2.1.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/jcommon-1.0.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/jfreechart-1.0.14.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/jfreechart-1.0.14-experimental.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/jfreechart-1.0.14-swt.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/servlet.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Tanay/Documents/Project Folder/CMU Semester (06)/15-498/TimestampVisualizer/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
