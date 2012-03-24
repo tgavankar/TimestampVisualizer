@@ -1,6 +1,6 @@
 public class Main {
 	 public static void main(String[] args) {
-	        PieChart demo = new PieChart("Comparison", "Which operating system are you using?");
+	        BarChart demo = new BarChart("Comparison");
 	        demo.pack();
 	        demo.setVisible(true);
 	    }
