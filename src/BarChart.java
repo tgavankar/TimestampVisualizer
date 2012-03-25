@@ -15,7 +15,7 @@ import org.jfree.ui.RefineryUtilities;
 
 public class BarChart extends ApplicationFrame {
 
-	public BarChart(String title, ArrayList<FileObject> f, TimeResolution t) {
+	public BarChart(String title, ArrayList<FileObject> f, TimeFilter t) {
 		super(title);
 
 		final CategoryDataset dataset = createDataset(f, t);
@@ -26,38 +26,46 @@ public class BarChart extends ApplicationFrame {
 		setContentPane(chartPanel);
 	}
 
-	private CategoryDataset createDataset(ArrayList<FileObject> f, TimeResolution t) { 
+	private CategoryDataset createDataset(ArrayList<FileObject> f, TimeFilter t) { 
 		DefaultKeyedValues objs = new DefaultKeyedValues();
-		Random r = new Random();
 		
-		// Find better way to handle multiple options (i.e. month==Feb && by days)
-		switch(t) {
-		case SECONDS:
-			break;
-		case MINUTES:
-			break;
-		case HOURS:
-			int[] counts = new int[24];
-			for(int i=0; i<counts.length; i++) {
-				counts[f.get(i).getHour()]++;
+		ArrayList<FileObject> filtered = new ArrayList<FileObject>();
+		
+		for(int i=0; i<f.size(); i++) {
+			// TODO: all the other checks for other times
+			if(t.hasHour(f.get(i).getHour())) {
+				filtered.add(f.get(i));
 			}
-			for(int i=0; i<counts.length; i++) {
-				objs.addValue(Integer.toString(i), counts[i]);
-			}
-			break;
-		case DAYS:
-			break;
-		case DAYSOFWEEK:
-			break;
-		case WEEKS:
-			break;
-		case MONTHS:
-			break;
-		case YEARS:
-			break;
 		}
 		
-		return DatasetUtilities.createCategoryDataset("Day", objs);
+		
+		switch(t.getGrouping()) {
+			// TODO: all the other cases of groupings
+			case SECONDS:
+				break;
+			case MINUTES:
+				break;
+			case HOURS:
+			     int[] counts = new int[24];
+			     for(int i=0; i<filtered.size(); i++) {
+			         counts[filtered.get(i).getHour()]++;
+			     }
+
+			     for(int i=0; i<counts.length; i++) {
+			         objs.addValue(Integer.toString(i), counts[i]);
+			     }
+				break;
+			case DAYS:
+				break;
+			case DAYSOFWEEK:
+				break;
+			case MONTHS:
+				break;
+			case YEARS:
+				break;
+		}
+		
+		return DatasetUtilities.createCategoryDataset("XAXIS NAME", objs);
 	}
 
 	private JFreeChart createChart(final CategoryDataset dataset) {
