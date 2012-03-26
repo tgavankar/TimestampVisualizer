@@ -1,5 +1,14 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -17,15 +26,39 @@ public class BarChart extends ApplicationFrame {
 
 	public BarChart(String title, ArrayList<FileObject> f, TimeFilter t) {
 		super(title);
-
+		Dimension d = new Dimension(300,200);
 		final CategoryDataset dataset = createDataset(f, t);
 		final JFreeChart chart = createChart(dataset);
-
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc= new GridBagConstraints();
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        
 		final ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
-		setContentPane(chartPanel);
+		panel.add(chartPanel);
+		panel.add(getPanel(d,  6, Color.red), gbc);
+		setContentPane(panel);
 	}
 
+	private JScrollPane getPanel(Dimension d, int rows, Color color) {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(color);
+        GridBagConstraints gbc= new GridBagConstraints();
+        gbc.insets = new Insets(10,5,10,5);
+        gbc.weightx = 1.0;
+        for(int i = 0, j = 1; i < rows; i++) {
+            gbc.gridwidth = GridBagConstraints.RELATIVE;
+            panel.add(new JButton(String.valueOf(j++)), gbc);
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            panel.add(new JButton(String.valueOf(j++)), gbc);
+        }
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setPreferredSize(d);
+        return scrollPane;
+    }
+	
 	private CategoryDataset createDataset(ArrayList<FileObject> f, TimeFilter t) { 
 		DefaultKeyedValues objs = new DefaultKeyedValues();
 		
