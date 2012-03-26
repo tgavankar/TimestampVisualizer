@@ -7,10 +7,28 @@ public class FileObject
   private int minute;
   private int second;
   private String name;
+  private int size;
+  private boolean isFile;
+  
+  private boolean userRead;
+  private boolean userWrite;
+  private boolean userExecute;
+  
+  private boolean groupRead;
+  private boolean groupWrite;
+  private boolean groupExecute;
+  
+  private boolean allRead;
+  private boolean allWrite;
+  private boolean allExecute;
   
   public FileObject(int month, int day, int year, 
                     int hour, int minute, int second,
-                    String name)
+                    String name, int size,
+                    boolean isFile,
+                    boolean userRead, boolean userWrite, boolean userExecute,
+                    boolean groupRead, boolean groupWrite, boolean groupExecute,
+                    boolean allRead, boolean allWrite, boolean allExecute)
   {
     this.month = month;
     this.day = day;
@@ -19,6 +37,68 @@ public class FileObject
     this.minute = minute;
     this.second = second;
     this.name = name;
+    this.size = size;
+    this.isFile = isFile;
+    this.userRead = userRead;
+    this.userWrite = userWrite;
+    this.userExecute = userExecute;
+    this.groupRead = groupRead;
+    this.groupWrite = groupWrite;
+    this.groupExecute = groupExecute;
+    this.allRead = allRead;
+    this.allWrite = allWrite;
+    this.allExecute = allExecute;
+  }
+  
+  public boolean userCanRead()
+  {
+    return userRead;
+  }
+  
+  public boolean userCanWrite()
+  {
+    return userWrite;
+  }
+  
+  public boolean userCanExecute()
+  {
+    return userExecute;
+  }
+  
+    public boolean groupCanRead()
+    {
+      return groupRead;
+    }
+    
+    public boolean groupCanWrite()
+    {
+      return groupWrite;
+    }
+    
+    public boolean groupCanExecute()
+    {
+      return groupExecute;
+    }
+    
+    public boolean allCanRead()
+    {
+      return allRead;
+    }
+    
+    public boolean allCanWrite()
+    {
+      return allWrite;
+    }
+    
+    public boolean allCanExecute()
+    {
+      return allExecute;
+    }
+  
+  
+  public boolean isFile()
+  {
+    return isFile;
   }
   
   public int getMonth()
@@ -56,6 +136,11 @@ public class FileObject
     return name;
   }
   
+  public int getSize()
+  {
+    return size;
+  }
+  
   public String getMonthByName()
   {
     String mo = "";
@@ -80,12 +165,12 @@ public class FileObject
   
   public String toString()
   {
-    String s = "File: "+getName()+", ";
-    s+="last modified on "+getMonthByName()+" "+getDay()+", '"+getYear()+" ";
-    
+    String s = "Name: "+getName()+"\n";
+    s+="Date modified: "+getMonthByName()+" "+getDay()+", "+getYear()+"\n";
+    s+="Time modified: ";
     if(getHour() < 10)
-      s+="at 0"+getHour()+":";   
-    else s+= "at "+getHour()+":";
+      s+="0"+getHour()+":";   
+    else s+= getHour()+":";
     
     if(getMinute() < 10)
       s+="0"+getMinute()+":";
@@ -94,6 +179,30 @@ public class FileObject
     if(getSecond() < 10)
       s+="0"+getSecond();
     else s+= getSecond();
+    
+    
+    s+="\nFile size: "+size+" bytes";
+    
+    if(isFile())
+      s+="\nThis is a file";
+    else s+= "\nThis is a directory";
+    
+    s+= "\nUser priviledges: ";
+    s+= userCanRead() ? "read " : "";
+    s+= userCanWrite() ? "write " : "";
+    s+= userCanExecute() ? "execute " : "";
+    
+    s+= "\nGroup priviledges: ";
+    s+= groupCanRead() ? "read " : "";
+    s+= groupCanWrite() ? "write " : "";
+    s+= groupCanExecute() ? "execute " : "";
+    
+        s+= "\nGeneral priviledges: ";
+    s+= allCanRead() ? "read " : "";
+    s+= allCanWrite() ? "write " : "";
+    s+= allCanExecute() ? "execute " : "";
+    
+    s+="\n-----------------";
     return s;
   }
   
