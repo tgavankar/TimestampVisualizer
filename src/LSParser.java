@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class LSParser
-{
-  // Desired format is obtained by executing "ls -l --time-style=+%D\ %T"
+{  
+  // Desired format is obtained by executing "ls -ls --time-style=+%m/%d/%Y\ %T"
   
   public static ArrayList<FileObject> parseFile(String filename)
   {
@@ -10,24 +10,60 @@ public class LSParser
     FileLoader fl = new FileLoader(filename);
     ArrayList<FileObject> files = new ArrayList<FileObject>();
     
+    int index = 0;
+    int month = 0;
+    int day = 0;
+    int year = 0;
+    int hour = 0;
+    int minute = 0;
+    int second = 0;
+    String name = "";
+    int sizeStart = 0;
+    int size = 0;
+    String line = "";
+    
     while(fl.hasMoreLines())
     {
-      String line = fl.readLine();
+      line = fl.readLine();
       if(line.indexOf("total") == 0) continue;
       
-      int index = line.indexOf("/");
-      int month = Integer.parseInt(line.substring(index-2, index));
-      int day = Integer.parseInt(line.substring(index+1, index+3));
-      int year = Integer.parseInt(line.substring(index+4, index+6));
-      int hour = Integer.parseInt(line.substring(index+7, index+9));
-      int minute = Integer.parseInt(line.substring(index+10, index+12));
-      int second = Integer.parseInt(line.substring(index+13, index+15));
-      String name = line.substring(index+16);
+      //Extract the modify date info + filename
+      index = line.indexOf("/");
+      month = Integer.parseInt(line.substring(index-2, index));
+      day = Integer.parseInt(line.substring(index+1, index+3));
+      year = Integer.parseInt(line.substring(index+4, index+8));
+      hour = Integer.parseInt(line.substring(index+9, index+11));
+      minute = Integer.parseInt(line.substring(index+12, index+14));
+      second = Integer.parseInt(line.substring(index+15, index+17));
+      name = line.substring(index+18);
       
-      FileObject fo = new FileObject(month, day, year, hour, minute, second, name);
+      //Extract the size in bytes
+      index -= 3;
+      sizeStart = index-1;
+      while(line.charAt(sizeStart) != ' ')
+      {
+        sizeStart--;
+      }
+      size = Integer.parseInt(line.substring(sizeStart+1, index));
+      
+
+      
+      FileObject fo = new FileObject(month, day, year, hour, minute, second, name, size,
+                                    (line.charAt(0) == '-'), (line.charAt(1) != '-'),
+                                    (line.charAt(2) != '-'), (line.charAt(3) != '-'),
+                                    (line.charAt(4) != '-'), (line.charAt(5) != '-'),
+                                    (line.charAt(6) != '-'), (line.charAt(7) != '-'),
+                                    (line.charAt(8) != '-'), (line.charAt(9) != '-'));
       files.add(fo);
     }
     
+    // Debug/test code - prints the list of formatted FileObject's
+    // Displays all info stored in the object in a readable format
+    // Uncomment to view
+    /*
+    for( FileObject x : files )
+      System.out.println(x);
+    */
     
     fl.close();
     return files;
