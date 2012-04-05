@@ -49,11 +49,12 @@ public class LSParser
       }
       size = Integer.parseInt(line.substring(sizeStart+1, index));
       
+
       GregorianCalendar cal = new GregorianCalendar(year, month, day);
       dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
       
       FileObject fo = new FileObject(month, day, year, hour, minute, second, dayOfWeek, name, size,
-                                    (line.charAt(0) == '-'), (line.charAt(1) != '-'),
+                                   (line.charAt(0) == '-'), (line.charAt(1) != '-'),
                                     (line.charAt(2) != '-'), (line.charAt(3) != '-'),
                                     (line.charAt(4) != '-'), (line.charAt(5) != '-'),
                                     (line.charAt(6) != '-'), (line.charAt(7) != '-'),

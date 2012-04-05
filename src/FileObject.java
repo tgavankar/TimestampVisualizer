@@ -137,7 +137,7 @@ public class FileObject
   {
     return dayOfWeek;
   }
-  
+
   public String getName()
   {
     return name;
@@ -148,6 +148,7 @@ public class FileObject
     return size;
   }
   
+
   public String getDayByName()
   {
     String days = "";
@@ -164,7 +165,6 @@ public class FileObject
     }
     return days;
   }
-  
   
   public String getMonthByName()
   {

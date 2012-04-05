@@ -70,29 +70,30 @@ public class BarChart extends ApplicationFrame {
 				filtered.add(f.get(i));
 			}
 			
-			if(t.hasHour(f.get(i).getMinute())) {
+			if(t.hasMinute(f.get(i).getMinute())) {
 				filtered.add(f.get(i));
 			}
 			
-			if(t.hasHour(f.get(i).getSecond())) {
+			if(t.hasSeconds(f.get(i).getSecond())) {
 				filtered.add(f.get(i));
 			}
 			
-			if(t.hasHour(f.get(i).getDay())) {
+			if(t.hasDate(f.get(i).getDay())) {
 				filtered.add(f.get(i));
 			}
 			
-			if(t.hasHour(f.get(i).getDayOfWeek())) {
+			if(t.hasDayOfWeek(f.get(i).getDayOfWeek())) {
 				filtered.add(f.get(i));
 			}
 			
-			if(t.hasHour(f.get(i).getMonth())) {
+			if(t.hasMonth(f.get(i).getMonth())) {
 				filtered.add(f.get(i));
 			}
 			
-			if(t.hasHour(f.get(i).getYear())) {
+			if(t.hasYear(f.get(i).getYear())) {
 				filtered.add(f.get(i));
 			}
+
 		}
 		
 		
