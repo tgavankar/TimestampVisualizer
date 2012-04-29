@@ -1,3 +1,5 @@
+package visualize;
+
 public class FileObject
 {
   private int month;

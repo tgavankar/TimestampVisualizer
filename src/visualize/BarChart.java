@@ -1,14 +1,20 @@
+package visualize;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -22,23 +28,28 @@ import org.jfree.data.general.DatasetUtilities;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
-public class BarChart extends ApplicationFrame {
+public class BarChart extends ApplicationFrame implements ActionListener {
 
+	
+	
+	
 	public BarChart(String title, ArrayList<FileObject> f, TimeFilter t) {
 		super(title);
 		Dimension d = new Dimension(300,200);
 		final CategoryDataset dataset = createDataset(f, t);
 		final JFreeChart chart = createChart(dataset);
+		
 		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc= new GridBagConstraints();
+		/*GridBagConstraints gbc= new GridBagConstraints();
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;*/
         
 		final ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
+		
 		panel.add(chartPanel);
-		panel.add(getPanel(d,  6, Color.red), gbc);
+		//panel.add(getPanel(d,  6, Color.red), gbc);
 		setContentPane(panel);
 	}
 
@@ -48,12 +59,28 @@ public class BarChart extends ApplicationFrame {
         GridBagConstraints gbc= new GridBagConstraints();
         gbc.insets = new Insets(10,5,10,5);
         gbc.weightx = 1.0;
-        for(int i = 0, j = 1; i < rows; i++) {
+        /*for(int i = 0, j = 1; i < rows; i++) {
             gbc.gridwidth = GridBagConstraints.RELATIVE;
             panel.add(new JButton(String.valueOf(j++)), gbc);
+            
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             panel.add(new JButton(String.valueOf(j++)), gbc);
-        }
+        }*/
+        
+        JButton b = new JButton("CLICK ME");
+        b.addActionListener(this);
+        JCheckBox c = new JCheckBox("select me!");
+        c.addActionListener(new ReDrawAction());
+        JTextField t = new JTextField(5);
+        
+        JButton bt = new JButton("submit text");
+        bt.addActionListener(new TextAction(t));
+        
+        //panel.add(b,gbc);
+        panel.add(c,gbc);
+        panel.add(t,gbc);
+        panel.add(bt,gbc);
+        
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setPreferredSize(d);
         return scrollPane;
@@ -181,4 +208,10 @@ public class BarChart extends ApplicationFrame {
 				PlotOrientation.VERTICAL, true, true, false);
 		return chart;
 	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		System.out.println(":(");
+	}
+
 }
