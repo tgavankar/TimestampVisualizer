@@ -35,6 +35,7 @@ import org.jfree.ui.ApplicationFrame;
 
 import actions.ClickChartAction;
 import actions.DummyAction;
+import actions.ExportAsPNGAction;
 import actions.NumPanelsAction;
 import actions.SwitchSidePanelAction;
 import actions.UndoZoomAction;
@@ -256,7 +257,7 @@ public class MasterPanel extends ApplicationFrame{
 		return null;
 	}
 	
-	private JFreeChart createChart(CategoryDataset data ) 
+	public JFreeChart createChart(CategoryDataset data)
 	{
 		//TODO change color of bars to match the associated data/view panels 
 		//using the 'colors' variable
@@ -272,7 +273,7 @@ public class MasterPanel extends ApplicationFrame{
 	public JMenuBar getBar()
 	{
 		JMenuBar mainMenuBar;
-		JMenu data, view, multiple, help, undo, submenu, submenu1, submenu2;
+		JMenu data, view, multiple, help, undo, export, submenu, submenu1, submenu2;
 		JMenuItem plainTextMenuItem, textIconMenuItem, iconMenuItem, subMenuItem;
 		
 		JRadioButtonMenuItem rbMenuItem;
@@ -376,6 +377,17 @@ public class MasterPanel extends ApplicationFrame{
 
 		mainMenuBar.add(undo);
 		
+		export = new JMenu("Export");
+		export.setMnemonic(KeyEvent.VK_E);
+			plainTextMenuItem = new JMenuItem("Export to PNG");
+				plainTextMenuItem.addActionListener(new ExportAsPNGAction(this));
+				export.add(plainTextMenuItem);
+			plainTextMenuItem = new JMenuItem("Export to PDF");
+				plainTextMenuItem.addActionListener(new DummyAction());
+				export.add(plainTextMenuItem);
+
+		mainMenuBar.add(export);
+
 		help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);
 		mainMenuBar.add(help);
