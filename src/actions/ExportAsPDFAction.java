@@ -51,11 +51,11 @@ public class ExportAsPDFAction implements ActionListener{
 				ArrayList<ExportData> data = new ArrayList<ExportData>();
 				
 				if(panel.numCharts == 1) {
-					data.add(new ExportData(panel.createChart(panel.dataset), "Graph", "Data Filter:\n" + panel.data[0] + "\nView Filter:\n" + panel.view[0]));
+					data.add(new ExportData(panel.createChart(panel.view[0]), "Graph", "Data Filter:\n" + panel.view[0]));
 				}
 				else if(panel.numCharts == 2) {
-					data.add(new ExportData(panel.createChart(panel.dataset1), "Graph 1", "Data Filter:\n" + panel.data[1] + "\nView Filter:\n" + panel.view[1]));
-					data.add(new ExportData(panel.createChart(panel.dataset2), "Graph 2", "Data Filter:\n" + panel.data[2] + "\nView Filter:\n" + panel.view[2]));
+					data.add(new ExportData(panel.createChart(panel.view[1]), "Graph 1", "Data Filter:\n" + panel.view[1]));
+					data.add(new ExportData(panel.createChart(panel.view[2]), "Graph 2", "Data Filter:\n" + panel.view[2]));
 				}
 				
 				try {

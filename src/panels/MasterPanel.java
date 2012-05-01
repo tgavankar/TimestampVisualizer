@@ -244,7 +244,7 @@ public class MasterPanel extends ApplicationFrame
 		return null;
 	}
 	
-	private JFreeChart createChart(DateRange d ) 
+	public JFreeChart createChart(DateRange d ) 
 	{
 		//TODO change color of bars to match the associated data/view panels 
 		//using the 'colors' variable
@@ -256,19 +256,19 @@ public class MasterPanel extends ApplicationFrame
 		switch (d.g)
 		{
 		case YEARS:
-			xLabel = "year"; break;
+			xLabel = "Year"; break;
 		case MONTHS:
-			xLabel = "month"; break;
+			xLabel = "Month"; break;
 		case DAYS_OF_WEEK:
-			xLabel = "day of the week"; break;
+			xLabel = "Day of the Week"; break;
 		case DAYS:
-			xLabel = "day of the month"; break;
+			xLabel = "Day of the Month"; break;
 		case HOURS:
-			xLabel = "hour of the day"; break;
+			xLabel = "Hour of the Day"; break;
 		case MINUTES:
-			xLabel = "minute"; break;
+			xLabel = "Minute"; break;
 		case SECONDS:
-			xLabel = "second"; break;
+			xLabel = "Second"; break;
 		}
 		
 		JFreeChart chart = ChartFactory.createBarChart(
@@ -280,7 +280,7 @@ public class MasterPanel extends ApplicationFrame
 	{
 		JMenuBar mainMenuBar;
 
-		JMenu data, help, undo;
+		JMenu data, help, undo, export;
 		JMenuItem plainTextMenuItem;
 		
 		JRadioButtonMenuItem rbMenuItem;
@@ -370,7 +370,7 @@ public class MasterPanel extends ApplicationFrame
 
 		mainMenuBar.add(undo);
 		
-		/*export = new JMenu("Export");
+		export = new JMenu("Export");
 		export.setMnemonic(KeyEvent.VK_E);
 			plainTextMenuItem = new JMenuItem("Export to PNG");
 				plainTextMenuItem.addActionListener(new ExportAsPNGAction(this));
@@ -379,7 +379,7 @@ public class MasterPanel extends ApplicationFrame
 				plainTextMenuItem.addActionListener(new ExportAsPDFAction(this));
 				export.add(plainTextMenuItem);
 
-		mainMenuBar.add(export);*/
+		mainMenuBar.add(export);
 
 		help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);

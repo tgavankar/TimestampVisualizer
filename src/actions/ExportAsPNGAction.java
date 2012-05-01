@@ -26,7 +26,7 @@ public class ExportAsPNGAction implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(panel.numCharts == 1) {
-			JFreeChart chart = panel.createChart(panel.dataset);
+			JFreeChart chart = panel.createChart(panel.view[0]);
 			try {
 				String savename = saveFile(new Frame(), "Save...", ".", "chart.png");
 				if(!savename.equals(".null")) { // User hit cancel
@@ -38,7 +38,7 @@ public class ExportAsPNGAction implements ActionListener{
 			}
 		}
 		else if(panel.numCharts == 2) {
-			JFreeChart chart1 = panel.createChart(panel.dataset1);
+			JFreeChart chart1 = panel.createChart(panel.view[1]);
 			try {
 				String savename = saveFile(new Frame(), "Save Top Chart...", ".", "chart_top.png");
 				if(!savename.equals(".null")) {
@@ -50,7 +50,7 @@ public class ExportAsPNGAction implements ActionListener{
 			}
 			
 			
-			JFreeChart chart2 = panel.createChart(panel.dataset2);
+			JFreeChart chart2 = panel.createChart(panel.view[2]);
 			try {
 				String savename = saveFile(new Frame(), "Save Bottom Chart...", ".", "chart_bottom.png");
 				if(!savename.equals(".null")) {

@@ -17,7 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import visualize.DateRange;
-import actions.ExportAction;
 import actions.RedrawAction;
 import actions.SwitchSidePanelAction;
 import actions.ViewSelectAction;
@@ -100,15 +99,15 @@ public class ViewPanel {
         final JButton bSubmit = new JButton("Apply");
         bSubmit.addActionListener(new RedrawAction(m));
 
-        final JButton export = new JButton("Export");
-        export.addActionListener(new ExportAction(m));
+        /*final JButton export = new JButton("Export");
+        export.addActionListener(new ExportAction(m));*/
         
         panel.add(bSubmit, constraints);
         
-        constraints.gridy = offset++;
+        /*constraints.gridy = offset++;
         panel.add(new JLabel(" "), constraints);
         constraints.gridy = offset++;
-        panel.add(export, constraints);
+        panel.add(export, constraints);*/
         
 	}
 	
