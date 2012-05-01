@@ -3,9 +3,7 @@ package visualize;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.category.CategoryDataset;
@@ -25,9 +23,15 @@ public class DateRange {
 		YEARS
 	}
 	
+	public boolean[] seconds = new boolean[60];
+	public boolean[] minutes = new boolean[60];
 	public boolean[] hours = new boolean[24];
 	public boolean[] daysOfWeek = new boolean[7];
 	public boolean[] months = new boolean[12];
+	public boolean[] years;
+	
+	public int minYear = 2012;
+	public int maxYear = 2012;
 	
 	public Grouping g;
 	
@@ -40,6 +44,10 @@ public class DateRange {
 	 */
 	public DateRange()
 	{
+		for(int i = 0; i < seconds.length; i++) seconds[i] = true;
+		
+		for(int i = 0; i < minutes.length; i++) minutes[i] = true;
+		
 		//set all hours to true
 		for(int i = 0; i < hours.length; i++) hours[i] = true;
 		
@@ -49,7 +57,8 @@ public class DateRange {
 		//set all months to true
 		for(int i=0; i < months.length; i++) months[i] = true;
 	
-		g = Grouping.DAYS_OF_WEEK;
+		// default group to years
+		g = Grouping.YEARS;
 	}
 	
 
@@ -60,24 +69,26 @@ public class DateRange {
 		
 		ArrayList<FileObject> filtered = new ArrayList<FileObject>();
 		
-		for(int i = 0; i < files.size(); i++)
-		{	
-			FileObject file = files.get(i);
+		for(FileObject file : files)
+		{
+			if(!seconds[file.getSecond()]) continue;
+			
+			if(!minutes[file.getMinute()]) continue;
 			
 			//check if hour is valid
 			if(!hours[file.getHour()]) continue;
-			
+						
 			//check if day of week is valid
 			if(!daysOfWeek[file.getDayOfWeek()-1]) continue;
-			
+						
 			//check if month is valid
 			if(!months[file.getMonth()-1]) continue;
-			
+						
+			if(years != null && !years[file.getYear()-minYear]) continue;
+						
 			//if everything is valid, then add to filtered
 			filtered.add(file);
 		}
-		
-
 		
 		return filtered;
 	}
@@ -86,17 +97,38 @@ public class DateRange {
 	public CategoryDataset getDataSet(ArrayList<FileObject> filtered)
 	{
 		HashMap<String, Integer> map = new HashMap<String,Integer>();
-		
 		int t;
 		String key;
 		switch(g)
 		{
-			case HOURS:				
-				
-				for(int i = 0; i < filtered.size(); i++)
+			case SECONDS:
+				for(FileObject file : filtered)
 				{
-					FileObject file = filtered.get(i);
-					
+					t = file.getSecond();
+					key = "" + t;
+					if(map.containsKey(key)) 
+					{
+						map.put(key, map.get(key) + 1);
+					}
+					else map.put(key, 1);					
+				}
+				break;
+			case MINUTES:
+				for(FileObject file : filtered)
+				{
+					t = file.getMinute();
+					key = "" + t;
+					if(map.containsKey(key)) 
+					{
+						map.put(key, map.get(key) + 1);
+					}
+					else map.put(key, 1);					
+				}
+				break;
+		
+			case HOURS:				
+				for(FileObject file : filtered)
+				{
 					t = file.getHour();
 					key = "" + t;
 					if(map.containsKey(key)) 
@@ -107,26 +139,20 @@ public class DateRange {
 				}
 				break;
 			case DAYS_OF_WEEK:
-				for(int i = 0; i < filtered.size(); i++)
+				for(FileObject file : filtered)
 				{
-					FileObject file = filtered.get(i);
-					
 					t = file.getDayOfWeek()-1;
 					key = DateRange.getDay(t);
 					if(map.containsKey(key)) 
 					{
 						map.put(key, map.get(key) + 1);
 					}
-					else map.put(key, 1);	
-					
-					
+					else map.put(key, 1);
 				}
 				break;
 			case MONTHS:
-				for(int i = 0; i < filtered.size(); i++)
+				for(FileObject file : filtered)
 				{
-					FileObject file = filtered.get(i);
-					
 					t = file.getMonth()-1;
 					key = DateRange.getMonth(t);
 					
@@ -136,6 +162,28 @@ public class DateRange {
 					}
 					else map.put(key, 1);					
 				}
+				break;
+			case YEARS:
+				for(FileObject file : filtered)
+				{
+					t = file.getYear();
+					key = ""+t;
+					
+					if(t < minYear) minYear=t;
+					if(t > maxYear) maxYear=t;
+					
+					if(map.containsKey(key)) 
+					{
+						map.put(key, map.get(key) + 1);
+					}
+					else map.put(key, 1);					
+				}
+				years = new boolean[maxYear-minYear+1];
+				for(int i = 0; i < years.length; i++)
+					years[i] = true;
+				break;
+				
+				
 		}
 		
 		
@@ -144,6 +192,30 @@ public class DateRange {
 		
 		switch(g)
 		{
+			case SECONDS:
+			for(int i = 0; i < seconds.length; i++)
+			{
+				String title = ""+i;
+				if(seconds[i])
+				{
+					if(map.containsKey(title)) objs.addValue(title, map.get(title));
+					else objs.addValue(title, 0);
+				}
+			}
+			break;
+			case MINUTES:
+				for(int i = 0; i < minutes.length; i++)
+				{
+					String title = ""+i;
+					if(minutes[i])
+					{
+						if(map.containsKey(title)) objs.addValue(title, map.get(title));
+						else objs.addValue(title, 0);
+					}
+				}
+				break;
+	
+
 			case HOURS:
 				for(int i = 0; i < hours.length; i++)
 				{
@@ -180,6 +252,15 @@ public class DateRange {
 					}
 				}
 				break;
+			case YEARS:
+				for(int i = minYear; i < maxYear+1; i++)
+				{
+					String title = ""+i;
+					if(map.containsKey(title)) objs.addValue(title, map.get(title));
+					else objs.addValue(title, 0);
+				}
+				break;
+				
 		
 		}
 		
@@ -193,7 +274,7 @@ public class DateRange {
 			objs.addValue(title, map.get(title));
 		}*/
 		
-		return DatasetUtilities.createCategoryDataset("XAXIS NAME", objs);
+		return DatasetUtilities.createCategoryDataset(Controller.inputFile, objs);
 	}
 
 	public static String getDay(int i)

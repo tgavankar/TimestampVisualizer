@@ -28,6 +28,16 @@ public class ViewSelectAction implements ActionListener{
 		if(b.isSelected())
 		{
 			range.g = button;
+			
+			switch(button)
+			{
+			case YEARS: range.zooms=0; break;
+			case MONTHS: range.zooms=1; break;
+			case DAYS_OF_WEEK: range.zooms=2; break;
+			case HOURS: range.zooms=3; break;
+			case MINUTES: range.zooms=4; break;
+			case SECONDS: range.zooms=5; break;
+			}
 		}
 	}
 }

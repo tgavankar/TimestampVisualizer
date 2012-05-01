@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,23 +18,25 @@ import javax.swing.JTextField;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.DefaultKeyedValues;
-import org.jfree.data.KeyedValues;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 
 public class BarChart extends ApplicationFrame implements ActionListener {
 
 	
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -543299591795106714L;
+
 	public BarChart(String title, ArrayList<FileObject> f, TimeFilter t) {
 		super(title);
-		Dimension d = new Dimension(300,200);
+		//Dimension d = new Dimension(300,200);
 		final CategoryDataset dataset = createDataset(f, t);
 		final JFreeChart chart = createChart(dataset);
 		
@@ -53,6 +54,7 @@ public class BarChart extends ApplicationFrame implements ActionListener {
 		setContentPane(panel);
 	}
 
+	@SuppressWarnings("unused")
 	private JScrollPane getPanel(Dimension d, int rows, Color color) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(color);
@@ -70,7 +72,6 @@ public class BarChart extends ApplicationFrame implements ActionListener {
         JButton b = new JButton("CLICK ME");
         b.addActionListener(this);
         JCheckBox c = new JCheckBox("select me!");
-        c.addActionListener(new ReDrawAction());
         JTextField t = new JTextField(5);
         
         JButton bt = new JButton("submit text");
@@ -211,7 +212,7 @@ public class BarChart extends ApplicationFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println(":(");
+		//System.out.println(":(");
 	}
 
 }
