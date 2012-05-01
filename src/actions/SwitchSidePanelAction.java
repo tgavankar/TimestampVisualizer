@@ -17,6 +17,13 @@ public class SwitchSidePanelAction implements ActionListener{
 		
 	}
 	
+	// TODO implement this
+	public SwitchSidePanelAction(MasterPanel m, int panel)
+	{
+		this(m);
+		
+	}
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		JComboBox source = (JComboBox) e.getSource();
