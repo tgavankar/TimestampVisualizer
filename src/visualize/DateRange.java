@@ -233,4 +233,70 @@ public class DateRange {
 		
 		return "";
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Grouped by: ");
+		switch(g) {
+			case SECONDS:
+				sb.append("Seconds\n");
+				break;
+			case MINUTES:
+				sb.append("Minutes\n");
+				break;
+			case HOURS:
+				sb.append("Hours\n");
+				break;
+			case DAYS:
+				sb.append("Days\n");
+				break;
+			case DAYS_OF_WEEK:
+				sb.append("Days of the Week\n");
+				break;
+			case MONTHS:
+				sb.append("Months\n");
+				break;
+			case YEARS:
+				sb.append("Years\n");
+				break;
+		}
+		
+		sb.append("Allowed Months: ");
+		for(int i=0; i<months.length; i++) {
+			if(months[i]) {
+				sb.append(getMonth(i));
+				sb.append(", ");
+			}
+		}
+		
+		// Remove last character (comma)
+		sb.setLength(sb.length()-2);
+		sb.append("\n");
+		
+		sb.append("Allowed Days of the Week: ");
+		for(int i=0; i<daysOfWeek.length; i++) {
+			if(daysOfWeek[i]) {
+				sb.append(getDay(i));
+				sb.append(", ");
+			}
+		}
+		
+		// Remove last character (comma)
+		sb.setLength(sb.length()-2);
+		sb.append("\n");
+		
+		sb.append("Allowed Hours: ");
+		for(int i=0; i<hours.length; i++) {
+			if(hours[i]) {
+				sb.append(i);
+				sb.append(", ");
+			}
+		}
+		
+		// Remove last character (comma)
+		sb.setLength(sb.length()-2);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 }

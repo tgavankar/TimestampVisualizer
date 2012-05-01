@@ -35,6 +35,7 @@ import org.jfree.ui.ApplicationFrame;
 
 import actions.ClickChartAction;
 import actions.DummyAction;
+import actions.ExportAsPDFAction;
 import actions.ExportAsPNGAction;
 import actions.NumPanelsAction;
 import actions.SwitchSidePanelAction;
@@ -61,8 +62,8 @@ public class MasterPanel extends ApplicationFrame{
 	
 	ArrayList<FileObject> allFiles;
 	
-	DateRange[] data = new DateRange[3];
-	DateRange[] view = new DateRange[3];
+	public DateRange[] data = new DateRange[3];
+	public DateRange[] view = new DateRange[3];
 	
 	//these colors represent the color of the side panel when you are editing
 	//the single chart, the dual chart 1, and the dual chart 2
@@ -383,7 +384,7 @@ public class MasterPanel extends ApplicationFrame{
 				plainTextMenuItem.addActionListener(new ExportAsPNGAction(this));
 				export.add(plainTextMenuItem);
 			plainTextMenuItem = new JMenuItem("Export to PDF");
-				plainTextMenuItem.addActionListener(new DummyAction());
+				plainTextMenuItem.addActionListener(new ExportAsPDFAction(this));
 				export.add(plainTextMenuItem);
 
 		mainMenuBar.add(export);
