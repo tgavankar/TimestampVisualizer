@@ -7,10 +7,13 @@ import java.util.GregorianCalendar;;
 public class LSParser
 {  
   // Desired format is obtained by executing "ls -ls --time-style=+%m/%d/%Y\ %T"
+  // Now also works for the format: "ls -Rls --time-style=+%m/%d/%Y\ %T"
+  // This is a recursive listing.
+  
   
   public static ArrayList<FileObject> parseFile(String filename)
   {
-    
+   
     FileLoader fl = new FileLoader(filename);
     ArrayList<FileObject> files = new ArrayList<FileObject>();
     
@@ -30,7 +33,31 @@ public class LSParser
     while(fl.hasMoreLines())
     {
       line = fl.readLine();
-      if(line.indexOf("total") == 0) continue;
+      //System.out.println(line);
+      if(line.indexOf("total") == 0) 
+      {
+        //System.out.println("removed 1: "+ line );
+        continue;
+      }
+      if(line.equals("")) 
+      {
+        //System.out.println("removed 2");
+        if(fl.hasMoreLines()) fl.readLine();
+        continue;
+      }
+      if(line.indexOf(".:") == 0) 
+      {
+        //System.out.println("removed 3: "+line);
+        continue;
+      }
+      if(line.indexOf("?") > -1 && line.indexOf("?") < 30) 
+      {
+        //System.out.println("removed 4: "+line);
+        continue;
+      }
+      
+
+          //  System.out.println(line);
       
       //Extract the modify date info + filename
       index = line.indexOf("/");
@@ -61,6 +88,8 @@ public class LSParser
                                     (line.charAt(4) != '-'), (line.charAt(5) != '-'),
                                     (line.charAt(6) != '-'), (line.charAt(7) != '-'),
                                     (line.charAt(8) != '-'), (line.charAt(9) != '-'));
+      
+      //System.out.println("file added.");
       files.add(fo);
     }
     
@@ -73,6 +102,8 @@ public class LSParser
     */
     
     fl.close();
+    
+    //System.out.println("Processed "+files.size()+" files.");
     return files;
   }
   
