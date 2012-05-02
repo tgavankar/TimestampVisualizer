@@ -342,6 +342,18 @@ public class DateRange {
 				break;
 		}
 		
+		sb.append("Allowed Years: ");
+		for(int i=0; i<years.length; i++) {
+			if(years[i]) {
+				sb.append(minYear+i);
+				sb.append(", ");
+			}
+		}
+		
+		// Remove last character (comma)
+		sb.setLength(sb.length()-2);
+		sb.append("\n");
+		
 		sb.append("Allowed Months: ");
 		for(int i=0; i<months.length; i++) {
 			if(months[i]) {
@@ -377,6 +389,31 @@ public class DateRange {
 		// Remove last character (comma)
 		sb.setLength(sb.length()-2);
 		sb.append("\n");
+		
+		sb.append("Allowed Minutes: ");
+		for(int i=0; i<minutes.length; i++) {
+			if(minutes[i]) {
+				sb.append(i);
+				sb.append(", ");
+			}
+		}
+	
+		// Remove last character (comma)
+		sb.setLength(sb.length()-2);
+		sb.append("\n");
+		
+		sb.append("Allowed Seconds: ");
+		for(int i=0; i<seconds.length; i++) {
+			if(seconds[i]) {
+				sb.append(i);
+				sb.append(", ");
+			}
+		}
+		
+		// Remove last character (comma)
+		sb.setLength(sb.length()-2);
+		sb.append("\n");
+	
 		
 		return sb.toString();
 	}
