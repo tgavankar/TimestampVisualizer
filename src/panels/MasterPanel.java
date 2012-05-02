@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -153,6 +154,8 @@ public class MasterPanel extends ApplicationFrame
 		
 		JMenuBar menubar = getBar();
 		c.gridx = 0; c.gridy = 0;
+		c.anchor=GridBagConstraints.WEST;
+		c.weighty=1;
 		panel.add(menubar,c);
 		
 		JFreeChart chart = createChart(view[0]);
@@ -186,6 +189,8 @@ public class MasterPanel extends ApplicationFrame
 		
 		JMenuBar menubar = getBar();
 		c.gridx = 0; c.gridy = 0;
+		c.anchor=GridBagConstraints.WEST;
+		c.weighty=1;
 		panel.add(menubar,c);
 		
 		

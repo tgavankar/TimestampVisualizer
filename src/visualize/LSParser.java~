@@ -13,6 +13,11 @@ public class LSParser
   
   public static ArrayList<FileObject> parseFile(String filename)
   {
+<<<<<<< HEAD
+	  
+=======
+   
+>>>>>>> ef096c9bd77f8c706a56b99608af06f147c47f7f
     FileLoader fl = new FileLoader(filename);
     ArrayList<FileObject> files = new ArrayList<FileObject>();
     
