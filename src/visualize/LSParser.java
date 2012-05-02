@@ -10,7 +10,7 @@ public class LSParser
   
   public static ArrayList<FileObject> parseFile(String filename)
   {
-    
+	  
     FileLoader fl = new FileLoader(filename);
     ArrayList<FileObject> files = new ArrayList<FileObject>();
     

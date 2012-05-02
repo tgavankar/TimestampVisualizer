@@ -6,7 +6,7 @@ public class Main
 	 public static void main(String[] args) 
 	 {
 		 if (args.length == 0)
-		 	new Controller("src/ls3.txt");
+		 	new Controller(null);
 		 else new Controller(args[0]);
 		 	
 	 }
