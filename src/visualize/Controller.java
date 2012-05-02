@@ -3,31 +3,17 @@ package visualize;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.ui.RefineryUtilities;
 
 import panels.MasterPanel;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.awt.Insets;
-import java.awt.Label;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
 
 public class Controller 
@@ -51,19 +37,29 @@ public class Controller
 	
 	public Controller(String fileName)
 	{
-		
-		
-		while(inputFile == null){
-			
-			if(fileName == null){
-				
-				inputFile =loadDialog();
-			}
+			if(fileName == null)
+				inputFile = loadDialog();
 			else
 				inputFile = fileName;
-		}
 		
-		allFiles = LSParser.parseFile(inputFile);
+		if(inputFile==null) // User hit cancel & does not want to select file
+			System.exit(0);
+			
+		try
+		{
+			allFiles = LSParser.parseFile(inputFile);
+		}
+		catch(Exception e)
+		{
+			JOptionPane pop = new JOptionPane();
+			String message = "The specified file has an invalid format.\n\n" 
+					+"Desired format is obtained by executing \n ls -ls --time-style=+%m/%d/%Y\\ %T" 
+					+ "\n             or \n" +
+					"ls -Rls --time-style=+%m/%d/%Y\\ %T\n";
+			pop.setLocation(50,50);
+			JOptionPane.showMessageDialog(pop, message, "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 		
 		display = new MasterPanel("Timestamp Visualizer", allFiles);
 		display.pack();
@@ -75,23 +71,31 @@ public class Controller
 	
 	private String loadDialog(){
 		
-		
+		/*
 		JOptionPane pop = new JOptionPane();
 		String message = "Desired format is obtained by executing \n ls -ls --time-style=+%m/%d/%Y\\ %T" + "\n or \n" +
 				"ls -Rls --time-style=+%m/%d/%Y\\ %T";
 		
 		pop.showMessageDialog(null, message);
-		
-		JFileChooser fc = new JFileChooser("Select Input File");
-		fc.showOpenDialog(null);
+		*/
 		
 		
-		JTextArea log = new JTextArea(5,20);
-		log.append(" Desired format is obtained by executing \"ls -ls --time-style=+%m/%d/%Y %T\"");
+		/*
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("Select a file");
+		int chosen = fc.showOpenDialog(null);
 		
-		fc.add(log);
+		if(chosen==JFileChooser.CANCEL_OPTION)
+			return null;
+		else return fc.getSelectedFile().getPath();
+		*/
 		
-		return fc.getSelectedFile().getPath();
+		FileDialog fd = new FileDialog(new Frame(), "Select a file", FileDialog.LOAD);
+	    fd.setLocation(50, 50);
+	    fd.setVisible(true);
+	    if(fd.getDirectory()==null || fd.getFile()==null) return null;
+	    return fd.getDirectory()+fd.getFile();
+		
 	}
 	
 
