@@ -9,7 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,7 +25,6 @@ import org.jfree.ui.ApplicationFrame;
 import visualize.DateRange;
 import visualize.FileObject;
 import actions.ClickChartAction;
-import actions.DummyAction;
 import actions.ExportAsPDFAction;
 import actions.ExportAsPNGAction;
 import actions.NumPanelsAction;
@@ -59,7 +57,7 @@ public class MasterPanel extends ApplicationFrame
 	//these colors represent the color of the side panel when you are editing
 	//the single chart, the dual chart 1, and the dual chart 2
 	//TODO choose better colors
-	Color[] colors = {Color.gray, Color.gray, Color.gray};
+	Color[] colors = {Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY};
 	
 	/*
 	 * start single chart global variables
