@@ -93,8 +93,12 @@ public class DateRange {
 		return filtered;
 	}
 
+	public CategoryDataset getDataSet(ArrayList<FileObject> filtered) {
+		return getDataSet(filtered, false);
+	}
+	
 	//used by view
-	public CategoryDataset getDataSet(ArrayList<FileObject> filtered)
+	public CategoryDataset getDataSet(ArrayList<FileObject> filtered, boolean truncateFilename)
 	{
 		HashMap<String, Integer> map = new HashMap<String,Integer>();
 		int t;
@@ -276,7 +280,15 @@ public class DateRange {
 			objs.addValue(title, map.get(title));
 		}*/
 		
-		return DatasetUtilities.createCategoryDataset(Controller.inputFile, objs);
+		String labelName = Controller.inputFile;
+		if(truncateFilename) {
+			int pos = labelName.lastIndexOf(System.getProperty("file.separator"));
+			if(pos > -1) {
+				labelName = labelName.substring(pos+1);
+			}
+		}
+		
+		return DatasetUtilities.createCategoryDataset(labelName, objs);
 	}
 
 	public static String getDay(int i)

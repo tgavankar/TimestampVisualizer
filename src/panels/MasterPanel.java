@@ -48,7 +48,7 @@ public class MasterPanel extends ApplicationFrame
 	//second digit represents data/view (0 for data, 1 for view)
 	public int sidePanel = 00; 
 	
-	ArrayList<FileObject> allFiles;
+	public ArrayList<FileObject> allFiles;
 	
 	//DateRange[] data = new DateRange[3];
 
@@ -247,14 +247,18 @@ public class MasterPanel extends ApplicationFrame
 		return null;
 	}
 	
-	public JFreeChart createChart(DateRange d ) 
+	public JFreeChart createChart(DateRange d) {
+		return createChart(d, false);
+	}
+	
+	public JFreeChart createChart(DateRange d, boolean truncateFile) 
 	{
 		//TODO change color of bars to match the associated data/view panels 
 		//using the 'colors' variable
 		
 		//TODO label axis properly
 
-		CategoryDataset dataset = d.getDataSet(d.filterFiles(allFiles));
+		CategoryDataset dataset = d.getDataSet(d.filterFiles(allFiles), truncateFile);
 		String xLabel = "";
 		switch (d.g)
 		{

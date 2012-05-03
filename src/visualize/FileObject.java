@@ -2,6 +2,7 @@ package visualize;
 
 public class FileObject
 {
+  private String origLine;
   private int month;
   private int day;
   private int year;
@@ -25,7 +26,7 @@ public class FileObject
   private boolean allWrite;
   private boolean allExecute;
   
-  public FileObject(int month, int day, int year, 
+  public FileObject(String orig, int month, int day, int year, 
                     int hour, int minute, int second,
                     int dayOfWeek, String name, int size,
                     boolean isFile,
@@ -33,6 +34,7 @@ public class FileObject
                     boolean groupRead, boolean groupWrite, boolean groupExecute,
                     boolean allRead, boolean allWrite, boolean allExecute)
   {
+	this.origLine = orig;
     this.month = month;
     this.day = day;
     this.year = year;
@@ -99,7 +101,10 @@ public class FileObject
       return allExecute;
     }
   
-  
+  public String getOrigLine() {
+	  return origLine;
+  }
+    
   public boolean isFile()
   {
     return isFile;
@@ -229,7 +234,7 @@ public class FileObject
     s+= allCanWrite() ? "write " : "";
     s+= allCanExecute() ? "execute " : "";
     
-    s+="\n-----------------";
+    s+="\n-----------------\n";
     return s;
   }
   

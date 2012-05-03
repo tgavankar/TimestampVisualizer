@@ -79,7 +79,7 @@ public class Controller
 		pop.showMessageDialog(null, message);
 		*/
 		
-		
+	
 		/*
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Select a file");
@@ -89,14 +89,13 @@ public class Controller
 			return null;
 		else return fc.getSelectedFile().getPath();
 		*/
+
 		
 		FileDialog fd = new FileDialog(new Frame(), "Select a file", FileDialog.LOAD);
 	    fd.setLocation(50, 50);
 	    fd.setVisible(true);
 	    if(fd.getDirectory()==null || fd.getFile()==null) return null;
 	    return fd.getDirectory()+fd.getFile();
-		
 	}
-	
 
 }

@@ -56,7 +56,7 @@ public class LSParser
       }
       
 
-          //  System.out.println(line);
+            //System.out.println(line);
       
       //Extract the modify date info + filename
       index = line.indexOf("/");
@@ -81,7 +81,7 @@ public class LSParser
       GregorianCalendar cal = new GregorianCalendar(year, month, day);
       dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
       
-      FileObject fo = new FileObject(month, day, year, hour, minute, second, dayOfWeek, name, size,
+      FileObject fo = new FileObject(line, month, day, year, hour, minute, second, dayOfWeek, name, size,
                                    (line.charAt(0) == '-'), (line.charAt(1) != '-'),
                                     (line.charAt(2) != '-'), (line.charAt(3) != '-'),
                                     (line.charAt(4) != '-'), (line.charAt(5) != '-'),
