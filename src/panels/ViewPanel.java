@@ -45,12 +45,12 @@ public class ViewPanel {
 	public JRadioButton minutesButton = new JRadioButton("Minute");
 	public JRadioButton secondsButton = new JRadioButton("Second");
 	
-	public JList<String> yearList;
-	public JList<String> monthList;
-	public JList<String> dayList;
-	public JList<String> hourList;
-	public JList<String> minuteList;
-	public JList<String> secondList;
+	public JList yearList;
+	public JList monthList;
+	public JList dayList;
+	public JList hourList;
+	public JList minuteList;
+	public JList secondList;
 	
 	
 	public ViewPanel(MasterPanel master, DateRange r, Dimension d, Color c, String s)
@@ -207,7 +207,7 @@ public class ViewPanel {
 		String[] choices = new String[2];
 		choices[0] = "Graph 1 (top)";
 		choices[1] = "Graph 2 (bottom)";
-		JComboBox<String> box = new JComboBox<String>(choices);
+		JComboBox box = new JComboBox(choices);
 			
 		if(title.indexOf("1") != -1)
 			box.setSelectedIndex(0);
@@ -231,7 +231,7 @@ public class ViewPanel {
 		{
 			sec[i] = ""+(i-1);
 		}
-		JList<String> list = new JList<String>(sec);
+		JList list = new JList(sec);
 		list.setVisibleRowCount(7);
 
 		int[] ind = new int[1];
@@ -264,7 +264,7 @@ public class ViewPanel {
 		{
 			min[i] = ""+(i-1);
 		}
-		JList<String> list = new JList<String>(min);
+		JList list = new JList(min);
 		list.setVisibleRowCount(7);
 
 		int[] ind = new int[1];
@@ -300,7 +300,7 @@ public class ViewPanel {
 		{
 			hrs[i] = ""+(i-1);
 		}
-		JList<String> list = new JList<String>(hrs);
+		JList list = new JList(hrs);
 		list.setVisibleRowCount(7);
 
 		int[] ind = new int[1];
@@ -335,7 +335,7 @@ public class ViewPanel {
 		{
 			days[i] = ""+DateRange.getDay(i-1).substring(0,3);
 		}
-		JList<String> list = new JList<String>(days);
+		JList list = new JList(days);
 		list.setVisibleRowCount(7);
 
 		int[] ind = new int[1];
@@ -372,7 +372,7 @@ public class ViewPanel {
 		{
 			mos[i] = DateRange.getMonth(i-1).substring(0,3);
 		}
-		JList<String> list = new JList<String>(mos);
+		JList list = new JList(mos);
 		list.setVisibleRowCount(7);
 
 		int[] ind = new int[1];
@@ -409,7 +409,7 @@ public class ViewPanel {
 			yrs[i] = ""+year;
 			year++;
 		}
-		JList<String> list = new JList<String>(yrs);
+		JList list = new JList(yrs);
 		
 		list.setVisibleRowCount(7);
 		int[] ind = new int[1];
