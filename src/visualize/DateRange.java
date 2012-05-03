@@ -178,9 +178,11 @@ public class DateRange {
 					}
 					else map.put(key, 1);					
 				}
-				years = new boolean[maxYear-minYear+1];
-				for(int i = 0; i < years.length; i++)
-					years[i] = true;
+				if(years == null) {
+					years = new boolean[maxYear-minYear+1];
+					for(int i = 0; i < years.length; i++)
+						years[i] = true;
+				}
 				break;
 				
 				
