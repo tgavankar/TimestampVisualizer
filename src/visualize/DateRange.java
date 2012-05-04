@@ -37,6 +37,8 @@ public class DateRange {
 	public int zooms = 0;
 	//years?
 
+	public String regex = null;
+	
 	
 	/*
 	 *  default assumes no restrictions, that you want all data
@@ -87,6 +89,8 @@ public class DateRange {
 						
 				if(years != null && !years[file.getYear()-minYear]) continue;
 						
+				if(regex != null && !file.getName().matches(regex)) continue;
+				
 				//if everything is valid, then add to filtered
 				filtered.get(i).add(file);
 			}

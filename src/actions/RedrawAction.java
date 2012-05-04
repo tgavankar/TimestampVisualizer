@@ -163,6 +163,14 @@ public class RedrawAction implements ActionListener{
 				for(int i = 0; i < dr.seconds.length; i++)
 					dr.seconds[i] = true;
 			}
+
+			//Filter by filename regex...
+			if(pane.regex.getText() != null && !pane.regex.getText().equals("")) {
+				dr.regex = pane.regex.getText();
+			}
+			else {
+				dr.regex = null;
+			}
 			
 		panel.redraw();
 	}

@@ -14,9 +14,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import visualize.DateRange;
@@ -51,6 +53,7 @@ public class ViewPanel {
 	public JList hourList;
 	public JList minuteList;
 	public JList secondList;
+	public JTextField regex;
 	
 	
 	public ViewPanel(MasterPanel master, DateRange r, Dimension d, Color c, String s, ViewPanel prev)
@@ -181,6 +184,7 @@ public class ViewPanel {
         	addHoursList(listPanel, selected);
         	addMinutesList(listPanel, selected);
         	addSecondsList(listPanel, selected);
+        	addRegexBox(listPanel, "");
         }
         else
         {
@@ -190,11 +194,11 @@ public class ViewPanel {
         	addHoursList(listPanel, prev.hourList.getSelectedIndices());
         	addMinutesList(listPanel, prev.minuteList.getSelectedIndices());
         	addSecondsList(listPanel, prev.secondList.getSelectedIndices());
+        	addRegexBox(listPanel, prev.regex.getText());
         }
-        
-        
+                
         constraints.gridx = 0;
-        constraints.gridy = offset++;
+        //constraints.gridy = offset++; // commented to make room for filter files
 		constraints.anchor = GridBagConstraints.CENTER;
 		
 		
@@ -257,12 +261,31 @@ public class ViewPanel {
 		
 		
 		c.gridx = 0;
-		c.gridy = offset++;
+		//c.gridy = offset++; // Removed to make room for filter files
 		c.insets = new Insets(0,10,0,10);
 		panel.add(wrapper, c);
 		
 	}
 	
+	
+	public void addRegexBox(JPanel panel, String prev)
+	{
+		JTextField re = new JTextField(10);
+	
+		regex = re;
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 5;
+		c.gridwidth = 3;
+	
+		panel.add(new JLabel("Filter files (Regex)"), c);
+			
+		c.insets = new Insets(0,5,10,5);
+		c.gridy = 6;
+		
+		panel.add(re, c);
+	}
 	
 	public void addSecondsList(JPanel panel, int[] ind)
 	{
