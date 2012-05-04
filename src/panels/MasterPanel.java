@@ -19,15 +19,19 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.RectangleInsets;
 
 import visualize.DateRange;
 import visualize.FileObject;
+import actions.AddNewDataSetAction;
 import actions.ClickChartAction;
 import actions.ExportAsPDFAction;
 import actions.ExportAsPNGAction;
 import actions.NumPanelsAction;
+import actions.RemoveDataSetAction;
 import actions.UndoZoomAction;
 
 public class MasterPanel extends ApplicationFrame
@@ -37,95 +41,95 @@ public class MasterPanel extends ApplicationFrame
 	JPanel panel;
 	public int numCharts = 1; //used to tell if we are viewing 1 or 2 charts
 	
-	
 	//dimensions for various parts of the panel
 	Dimension singleChartD = new Dimension(800, 600);
 	Dimension dualChartD = new Dimension(800, 300);
-	Dimension sideDimension = new Dimension(300,600);
+	public Dimension sideDimension = new Dimension(300,600);
 	
 	//represents which side panel to show
-	//first digit represents which chart (0 for single, 1 for dual chart 1, 2 for dual chart 2)
-	//second digit represents data/view (0 for data, 1 for view)
-	public int sidePanel = 00; 
+	public int sidePanel = 0; 
 	
-	public ArrayList<FileObject> allFiles;
+	public  ArrayList<ArrayList<FileObject>> allFilesSingle;
+	public ArrayList<ArrayList<FileObject>> allFilesDual1;
+	public ArrayList<ArrayList<FileObject>> allFilesDual2;
 	
-	//DateRange[] data = new DateRange[3];
+	public ArrayList<String> singleGraphTitles;
+	public ArrayList<String> dual1GraphTitles;
+	public ArrayList<String> dual2GraphTitles;
 
-	public DateRange[] view = new DateRange[3];
+	public DateRange[] view =  new DateRange[3];
 	
 	//these colors represent the color of the side panel when you are editing
 	//the single chart, the dual chart 1, and the dual chart 2
-	//TODO choose better colors
 	Color[] colors = {Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY};
 	
-	/*
-	 * start single chart global variables
-	 */
-	//TODO use title
-	String title; 
-	
 
-	public CategoryDataset dataset; 
-	
-		
-	//DataPanel dataPanel;
 	public ViewPanel prefPanel;
-	//end single chart global variables
 	
-	
-	
-	/*
-	 * start dual char1 global variables
-	 */
-	String title1;
-	
-	public CategoryDataset dataset1;
-	
-	//DataPanel dataPanel1;
 	public ViewPanel prefPanel1;	
-	//end dual chart1 global variables
 	
-	
-	
-	/*
-	 * start dual chart2 global variables
-	 */
-	String title2;
-	
-
-	public CategoryDataset dataset2;
-	
-	//DataPanel dataPanel2;
 	public ViewPanel prefPanel2;	
-	//end dual chart2 global variables
 	
-	public MasterPanel(String title, ArrayList<FileObject> all)
+	
+	
+	public MasterPanel()
 	{
-		super(title);
-		allFiles = all;
+		super("Timestamp Visualizer");
+		allFilesSingle = new ArrayList<ArrayList<FileObject>>();
+		allFilesDual1 = new ArrayList<ArrayList<FileObject>>();
+		allFilesDual2 = new ArrayList<ArrayList<FileObject>>();
+		
 
+		singleGraphTitles = new ArrayList<String>();
+		dual1GraphTitles = new ArrayList<String>();
+		dual2GraphTitles = new ArrayList<String>();
+		
 		for(int i =0; i < 3; i++)
 		{
-			//data[i] = new DateRange();
-			view[i] = new DateRange();
-			view[i].getDataSet(all);
+			view[i] = new DateRange(i);
 		}
 		
+		//addSet(true, all, title, true, true, true);
+		
+		
 
-		//dataPanel = new DataPanel(this, data[0], sideDimension, colors[0], "Single Chart: Data Selection");
-		prefPanel = new ViewPanel(this, view[0], sideDimension, colors[0], "Single Chart: View Selection");
-		
-		//dataPanel1 = new DataPanel(this, data[1], sideDimension, colors[1], "Dual Chart 1: Data Selection");
-		prefPanel1 = new ViewPanel(this, view[1], sideDimension, colors[1], "Dual Chart 1: View Selection");
+		view[0].getDataSet(allFilesSingle, singleGraphTitles);
+		view[1].getDataSet(allFilesDual1, dual1GraphTitles);
+		view[2].getDataSet(allFilesDual2, dual2GraphTitles);
 		
 		
-		//dataPanel2 = new DataPanel(this, data[2], sideDimension, colors[2], "Dual Chart 2: Data Selection");
-		prefPanel2 = new ViewPanel(this, view[2], sideDimension, colors[2], "Dual Chart 2: View Selection");
+		initPanels(null,null,null);
 		
 
 		panel = new JPanel(new GridBagLayout());
 		redraw();
+	}
+	
+	public void initPanels(ViewPanel prev1, ViewPanel prev2, ViewPanel prev3)
+	{
+		prefPanel = new ViewPanel(
+				this, 
+				view[0],
+				sideDimension, 
+				colors[0], 
+				"Single Chart: View Selection",
+				prev1);
+		
+		prefPanel1 = new ViewPanel(
+				this, 
+				view[1], 
+				sideDimension,
+				colors[1], 
+				"Dual Chart 1: View Selection",
+				prev2);
+	
+		prefPanel2 = new ViewPanel(
+				this, 
+				view[2], 
+				sideDimension, 
+				colors[2], 
+				"Dual Chart 2: View Selection",
+				prev3);
 	}
 	
 	public void redraw()
@@ -144,9 +148,6 @@ public class MasterPanel extends ApplicationFrame
 	//draws panel with 1 chart
 	public void redraw1()
 	{
-		//ArrayList<FileObject> selectedFiles = view[0].filterFiles(allFiles);
-		//dataset = view[0].getDataSet(selectedFiles);
-				
 		panel.removeAll();
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -156,10 +157,11 @@ public class MasterPanel extends ApplicationFrame
 		c.weighty=1;
 		panel.add(menubar,c);
 		
-		JFreeChart chart = createChart(view[0]);
+		JFreeChart chart = createChart(view[0], 0);
 		ChartPanel p = new ChartPanel(chart);
+		chart.setBorderVisible(false);
 		p.setPreferredSize(singleChartD);///////////////////////////////////
-		p.addChartMouseListener(new ClickChartAction(view[0], this));
+		p.addChartMouseListener(new ClickChartAction(view[0], this,0));
 		c.gridy=1;		
 		panel.add(p, c);
 		
@@ -174,14 +176,6 @@ public class MasterPanel extends ApplicationFrame
 	//draws panel with 2 charts
 	public void redraw2()
 	{
-		/*
-		ArrayList<FileObject> selectedFiles1 = view[1].filterFiles(allFiles);
-		dataset1 = view[1].getDataSet(selectedFiles1);
-		
-		ArrayList<FileObject> selectedFiles2 = view[2].filterFiles(allFiles);
-		dataset2 = view[2].getDataSet(selectedFiles2);
-		*/	
-				
 		panel.removeAll();
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -195,25 +189,21 @@ public class MasterPanel extends ApplicationFrame
 		JPanel chartPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints chartC = new GridBagConstraints();
 		
-		JFreeChart chart1 = createChart(view[1]);
-		chart1.setBorderPaint(Color.black);
-		chart1.setBorderVisible(true);
-		chart1.setBorderStroke(new BasicStroke(4f));
+		JFreeChart chart1 = createChart(view[1], 1);
+		chart1.setBorderVisible(sidePanel == 01);
 		ChartPanel p1 = new ChartPanel(chart1);
 		p1.setPreferredSize(dualChartD);///////////////////////////////////
-		p1.addChartMouseListener(new ClickChartAction(view[1], this));
+		p1.addChartMouseListener(new ClickChartAction(view[1], this, 1));
 		chartC.gridx=0;
 		chartC.gridy=0;		
 		chartPanel.add(p1, chartC);
 		
 		
-		JFreeChart chart2 = createChart(view[2]);
-		chart2.setBorderPaint(Color.black);
-		chart2.setBorderVisible(true);
-		chart2.setBorderStroke(new BasicStroke(4f));
+		JFreeChart chart2 = createChart(view[2], 2);
+		chart2.setBorderVisible(sidePanel==2);
 		ChartPanel p2 = new ChartPanel(chart2);
 		p2.setPreferredSize(dualChartD);///////////////////////////////////
-		p2.addChartMouseListener(new ClickChartAction(view[2], this));
+		p2.addChartMouseListener(new ClickChartAction(view[2], this, 2));
 		chartC.gridx=0;
 		chartC.gridy=1;			
 		chartPanel.add(p2, chartC);
@@ -247,18 +237,109 @@ public class MasterPanel extends ApplicationFrame
 		return null;
 	}
 	
-	public JFreeChart createChart(DateRange d) {
-		return createChart(d, false);
+	private void adjustYears(ArrayList<FileObject> files, boolean[] graphs)
+	{
+		for(FileObject file : files)
+		{
+			for(int i =0; i < graphs.length; i++)
+			{
+				if(!graphs[i]) continue;
+				
+				
+				if(file.getYear() > view[i].maxYear)
+				{
+					if(view[i].minYear==Integer.MAX_VALUE)
+					{
+						view[i].maxYear = file.getYear();
+					}
+					else
+					{
+						boolean[] newYears = new boolean[file.getYear()-view[i].minYear+1];
+						for(int j = 0; j< newYears.length; j++)
+							newYears[j]=true;
+						if(view[i].years != null)
+						{
+							for(int j = 0; j<view[i].years.length; j++)
+							{
+								newYears[j] = view[i].years[j];
+							}
+						}
+						view[i].maxYear = file.getYear();
+						view[i].years = newYears;
+					}
+
+				}
+				
+				
+				if(file.getYear() < view[i].minYear)
+				{
+					if(view[i].maxYear==Integer.MIN_VALUE)
+					{
+						view[i].minYear = file.getYear();
+					}
+					else
+					{
+						int diff = view[i].minYear-file.getYear();
+						boolean[] newYears = new boolean[view[i].maxYear - file.getYear() + 1];
+						for(int j = 0; j< newYears.length; j++)
+							newYears[j]=true;
+						if(view[i].years != null)
+						{
+							for(int j = 0; j<view[i].years.length; j++)
+							{
+								newYears[j+diff] = view[i].years[j];
+							}
+						}
+						view[i].minYear = file.getYear();
+						view[i].years = newYears;
+					}
+				}
+			}
+		}
 	}
 	
-	public JFreeChart createChart(DateRange d, boolean truncateFile) 
+	public void addSet(ArrayList<FileObject> files, String title, boolean g1, boolean g2, boolean g3)
+	{
+		if(g1) 
+		{
+			allFilesSingle.add(files);
+			singleGraphTitles.add(title);
+		}
+		
+		
+		if(g2) 
+		{
+			allFilesDual1.add(files);
+			dual1GraphTitles.add(title);
+		}
+		
+		
+		if(g3)
+		{
+			allFilesDual2.add(files);
+			dual2GraphTitles.add(title);
+		}
+		
+		boolean[] arr = new boolean[3];
+		arr[0]=g1; arr[1] = g2; arr[2] = g3;
+
+		adjustYears(files,arr);
+		initPanels(prefPanel, prefPanel1, prefPanel2);
+	}
+	
+	public JFreeChart createChart(DateRange d, int chartNum) 
 	{
 		//TODO change color of bars to match the associated data/view panels 
 		//using the 'colors' variable
 		
 		//TODO label axis properly
 
-		CategoryDataset dataset = d.getDataSet(d.filterFiles(allFiles), truncateFile);
+		CategoryDataset dataset = null;
+		
+		if(chartNum==0) dataset = d.getDataSet(d.filterFiles(allFilesSingle),singleGraphTitles);
+		if(chartNum==1) dataset = d.getDataSet(d.filterFiles(allFilesDual1), dual1GraphTitles);
+		if(chartNum==2) dataset = d.getDataSet(d.filterFiles(allFilesDual2), dual2GraphTitles);
+
 		String xLabel = "";
 		switch (d.g)
 		{
@@ -277,9 +358,26 @@ public class MasterPanel extends ApplicationFrame
 		case SECONDS:
 			xLabel = "Second"; break;
 		}
-		
 		JFreeChart chart = ChartFactory.createBarChart(
-				title, xLabel, "# files accessed", dataset, PlotOrientation.VERTICAL, true, true, false);
+				null, 
+				xLabel, 
+				"# files accessed", 
+				dataset, 
+				PlotOrientation.VERTICAL, 
+				true, 
+				true, 
+				false);
+		chart.setBackgroundPaint(Color.LIGHT_GRAY);
+	    chart.getPlot().setBackgroundPaint(Color.GRAY);
+		chart.getLegend().setBackgroundPaint(Color.LIGHT_GRAY);
+		chart.setBorderPaint(Color.BLACK);
+		chart.setBorderStroke(new BasicStroke(3));
+		chart.setBorderVisible(true);
+		chart.getPlot().setInsets(new RectangleInsets(0,0,10,0));
+		
+		BarRenderer br = new BarRenderer();
+		br.setItemMargin(0.0);
+		chart.getCategoryPlot().setRenderer(br);
 		return chart;
 	}
 
@@ -287,11 +385,10 @@ public class MasterPanel extends ApplicationFrame
 	{
 		JMenuBar mainMenuBar;
 
-		JMenu data, help, undo, export;
+		JMenu data, help, undo, imp, export;
 		JMenuItem plainTextMenuItem;
 		
 		JRadioButtonMenuItem rbMenuItem;
-		//ImageIcon icon = createImageIcon("jmenu.jpg");
 		
 		
 		mainMenuBar = new JMenuBar();
@@ -303,7 +400,6 @@ public class MasterPanel extends ApplicationFrame
 		rbMenuItem.setSelected((1==numCharts));
 		rbMenuItem.addActionListener(new NumPanelsAction(this, 1, 0));
 		data.add(rbMenuItem);
-		data.addSeparator();	
 			
 		rbMenuItem = new JRadioButtonMenuItem( "Double Graph");
 		rbMenuItem.setSelected((2==numCharts));
@@ -314,68 +410,33 @@ public class MasterPanel extends ApplicationFrame
 
 		
 		
-		/*
-		//create items for view section
-		view = new JMenu("View Selection");
-		view.setMnemonic(KeyEvent.VK_V);
-		mainMenuBar.add(view);
-		
-		ButtonGroup itemGroup = new ButtonGroup();
-
-		
-		submenu = new JMenu("Single Graph");
-		rbMenuItem = new JRadioButtonMenuItem( "Single Graph");
-		rbMenuItem.setSelected((1==numCharts));
-		rbMenuItem.setMnemonic(KeyEvent.VK_R);
-		itemGroup.add(rbMenuItem);
-		rbMenuItem.addActionListener(new NumPanelsAction(this, 1));
-		submenu.add(rbMenuItem);
-		plainTextMenuItem = new JMenuItem("Standard Selection");
-		plainTextMenuItem.addActionListener(new SwitchSidePanelAction(this, 1));
-		plainTextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.CTRL_MASK));
-		submenu.add(plainTextMenuItem);
-		view.add(submenu);
-				
-		submenu = new JMenu("Double Graphs");
-		rbMenuItem = new JRadioButtonMenuItem("Double Graphs");
-		rbMenuItem.setSelected((2==numCharts));
-		itemGroup.add(rbMenuItem);
-		rbMenuItem.addActionListener(new NumPanelsAction(this, 2));
-		submenu.add(rbMenuItem);
-			submenu1 = new JMenu("Chart 1");
-			plainTextMenuItem = new JMenuItem("Standard");
-			plainTextMenuItem.addActionListener(new SwitchSidePanelAction(this, 11));
-			submenu1.add(plainTextMenuItem);
-			plainTextMenuItem = new JMenuItem("Custom");
-			submenu1.add(plainTextMenuItem);
-			submenu.add(submenu1);
-			
-			submenu1 = new JMenu("Chart 2");
-			plainTextMenuItem = new JMenuItem("Standard");
-			plainTextMenuItem.addActionListener(new SwitchSidePanelAction(this, 21));
-			submenu1.add(plainTextMenuItem);
-			plainTextMenuItem = new JMenuItem("Custom");
-			submenu1.add(plainTextMenuItem);
-			submenu.add(submenu1);
-		view.add(submenu);
-		*/
-		
 		undo= new JMenu("Undo Zoom");
 		undo.setMnemonic(KeyEvent.VK_U);
 			plainTextMenuItem = new JMenuItem("Single Chart");
-				plainTextMenuItem.addActionListener(new UndoZoomAction(this, prefPanel));
+				plainTextMenuItem.addActionListener(new UndoZoomAction(this, 0));
 				undo.add(plainTextMenuItem);
 				undo.addSeparator();
 			plainTextMenuItem = new JMenuItem("Dual Chart 1");
 				plainTextMenuItem.setMnemonic(KeyEvent.VK_1);
-				plainTextMenuItem.addActionListener(new UndoZoomAction(this, prefPanel1));
+				plainTextMenuItem.addActionListener(new UndoZoomAction(this, 1));
 				undo.add(plainTextMenuItem);
 			plainTextMenuItem = new JMenuItem("Dual Chart 2");
 			plainTextMenuItem.setMnemonic(KeyEvent.VK_2);
-				plainTextMenuItem.addActionListener(new UndoZoomAction(this, prefPanel2));
+				plainTextMenuItem.addActionListener(new UndoZoomAction(this, 2));
 				undo.add(plainTextMenuItem);
 
 		mainMenuBar.add(undo);
+		
+		imp = new JMenu("Import");
+		imp.setMnemonic(KeyEvent.VK_I);
+		plainTextMenuItem = new JMenuItem("Import a File");
+		plainTextMenuItem.addActionListener(new AddNewDataSetAction(this));
+		imp.add(plainTextMenuItem);
+		plainTextMenuItem = new JMenuItem("Remove a File");
+		plainTextMenuItem.addActionListener(new RemoveDataSetAction(this));
+		imp.add(plainTextMenuItem);
+		mainMenuBar.add(imp);
+		
 		
 		export = new JMenu("Export");
 		export.setMnemonic(KeyEvent.VK_E);

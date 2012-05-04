@@ -1,19 +1,16 @@
 package actions;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JTextField;
-
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
 
 import panels.MasterPanel;
-import visualize.DateRange;
 
 public class ExportAsPNGAction implements ActionListener{
 
@@ -26,10 +23,10 @@ public class ExportAsPNGAction implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(panel.numCharts == 1) {
-			JFreeChart chart = panel.createChart(panel.view[0]);
+			JFreeChart chart = panel.createChart(panel.view[0],0);
 			try {
 				String savename = saveFile(new Frame(), "Save...", ".", "chart.png");
-				if(!savename.equals(".null")) { // User hit cancel
+				if(savename != null) { // User hit cancel
 					ChartUtilities.saveChartAsPNG(new File(savename), chart, 800, 600);
 				}
 			} catch (IOException e1) {
@@ -38,7 +35,7 @@ public class ExportAsPNGAction implements ActionListener{
 			}
 		}
 		else if(panel.numCharts == 2) {
-			JFreeChart chart1 = panel.createChart(panel.view[1]);
+			JFreeChart chart1 = panel.createChart(panel.view[1],1);
 			try {
 				String savename = saveFile(new Frame(), "Save Top Chart...", ".", "chart_top.png");
 				if(!savename.equals(".null")) {
@@ -50,10 +47,10 @@ public class ExportAsPNGAction implements ActionListener{
 			}
 			
 			
-			JFreeChart chart2 = panel.createChart(panel.view[2]);
+			JFreeChart chart2 = panel.createChart(panel.view[2],2);
 			try {
 				String savename = saveFile(new Frame(), "Save Bottom Chart...", ".", "chart_bottom.png");
-				if(!savename.equals(".null")) {
+				if(savename != null) {
 					ChartUtilities.saveChartAsPNG(new File(savename), chart2, 800, 600);
 				}
 			} catch (IOException e1) {
@@ -67,9 +64,10 @@ public class ExportAsPNGAction implements ActionListener{
 		FileDialog fd = new FileDialog(f, title, FileDialog.SAVE);
 	    fd.setFile(fileType);
 	    fd.setDirectory(defDir);
-	    fd.setLocation(50, 50);
+	    fd.setLocation(300,200);
 	    fd.setVisible(true);
-	    return fd.getDirectory() + fd.getFile();
+	    if(fd.getDirectory()==null || fd.getFile()==null) return null;
+	    return fd.getDirectory()+fd.getFile();
 	}
 	
 

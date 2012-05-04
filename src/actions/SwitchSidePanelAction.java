@@ -3,7 +3,7 @@ package actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JComboBox;
+import javax.swing.JButton;
 
 import panels.MasterPanel;
 
@@ -26,11 +26,10 @@ public class SwitchSidePanelAction implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		JComboBox source = (JComboBox) e.getSource();
-		master.sidePanel = source.getSelectedIndex()+1;
 		
-		if(master.sidePanel==1) source.setSelectedIndex(1);
-		else if(master.sidePanel==2) source.setSelectedIndex(0);
+		JButton source = (JButton) e.getSource();
+		if(source.getText().equals("Top Graph")) master.sidePanel = 1;
+		if(source.getText().equals("Bottom Graph")) master.sidePanel =2;
 		
 		master.redraw();
 	}

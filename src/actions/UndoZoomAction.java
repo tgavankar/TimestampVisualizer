@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import panels.MasterPanel;
-import panels.ViewPanel;
 import visualize.DateRange;
 import visualize.DateRange.Grouping;
 
@@ -13,19 +12,25 @@ public class UndoZoomAction implements ActionListener{
 
 	MasterPanel panel;
 	DateRange range;
-	ViewPanel vp;
+	int panelNum;
 	
-	public UndoZoomAction(MasterPanel m , ViewPanel vp) 
+	public UndoZoomAction(MasterPanel m , int panelNum) 
 	{
 		panel = m;
-		range = vp.range;
-		this.vp = vp;
+		range = panel.view[panelNum];
+		this.panelNum = panelNum;
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{
 		if(range.zooms <= 0) return;
 
+		
+		if(panelNum != 0)
+		{
+			panel.sidePanel = panelNum;
+		}
+		
 		switch(range.g)
 		{
 			case YEARS:
@@ -58,11 +63,11 @@ public class UndoZoomAction implements ActionListener{
 	
 	private void minutesToHours()
 	{
-		if(panel.numCharts == 1)
+		if(panelNum == 0)
 			panel.prefPanel.hoursButton.setSelected(true);
-		else if(panel.sidePanel == 1)
+		else if(panelNum == 1)
 			panel.prefPanel1.hoursButton.setSelected(true);
-		else if(panel.sidePanel==2)
+		else if(panelNum==2)
 			panel.prefPanel2.hoursButton.setSelected(true);
 		
 		for(int i = 0; i < range.hours.length; i++)
@@ -75,11 +80,11 @@ public class UndoZoomAction implements ActionListener{
 	
 	private void secondsToMinutes()
 	{
-		if(panel.numCharts == 1)
+		if(panelNum ==0)
 			panel.prefPanel.minutesButton.setSelected(true);
-		else if(panel.sidePanel == 1)
+		else if(panelNum== 1)
 			panel.prefPanel1.minutesButton.setSelected(true);
-		else if(panel.sidePanel==2)
+		else if(panelNum==2)
 			panel.prefPanel2.minutesButton.setSelected(true);
 		
 		for(int i = 0; i < range.minutes.length; i++)
@@ -92,11 +97,11 @@ public class UndoZoomAction implements ActionListener{
 	
 	private void dOwToMonths()
 	{
-		if(panel.numCharts == 1)
+		if(panelNum==0)
 			panel.prefPanel.monthsButton.setSelected(true);
-		else if(panel.sidePanel == 1)
+		else if(panelNum == 1)
 			panel.prefPanel1.monthsButton.setSelected(true);
-		else if(panel.sidePanel==2)
+		else if(panelNum==2)
 			panel.prefPanel2.monthsButton.setSelected(true);
 		
 		for(int i = 0; i < range.months.length; i++)
@@ -109,11 +114,11 @@ public class UndoZoomAction implements ActionListener{
 	
 	private void hoursToDoW()
 	{
-		if(panel.numCharts == 1)
+		if(panelNum==0)
 			panel.prefPanel.daysOfWeekButton.setSelected(true);
-		else if(panel.sidePanel == 1)
+		else if(panelNum == 1)
 			panel.prefPanel1.daysOfWeekButton.setSelected(true);
-		else if(panel.sidePanel==2)
+		else if(panelNum==2)
 			panel.prefPanel2.daysOfWeekButton.setSelected(true);
 		
 		for(int i = 0; i < range.daysOfWeek.length; i++)
@@ -126,11 +131,11 @@ public class UndoZoomAction implements ActionListener{
 	
 	private void monthsToYears()
 	{
-		if(panel.numCharts == 1)
+		if(panelNum==0)
 			panel.prefPanel.yearsButton.setSelected(true);
-		else if(panel.sidePanel == 1)
+		else if(panelNum == 1)
 			panel.prefPanel1.yearsButton.setSelected(true);
-		else if(panel.sidePanel==2)
+		else if(panelNum==2)
 			panel.prefPanel2.yearsButton.setSelected(true);
 		
 		for(int i = 0; i < range.years.length; i++)

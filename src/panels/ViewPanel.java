@@ -9,7 +9,6 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -45,6 +44,7 @@ public class ViewPanel {
 	public JRadioButton minutesButton = new JRadioButton("Minute");
 	public JRadioButton secondsButton = new JRadioButton("Second");
 	
+	
 	public JList yearList;
 	public JList monthList;
 	public JList dayList;
@@ -53,13 +53,16 @@ public class ViewPanel {
 	public JList secondList;
 	
 	
-	public ViewPanel(MasterPanel master, DateRange r, Dimension d, Color c, String s)
+	public ViewPanel(MasterPanel master, DateRange r, Dimension d, Color c, String s, ViewPanel prev)
 	{
+		
 		m = master;
 		this.d = d;
 		this.c = c;
 		range = r;
 		title = s;
+		
+
 		
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -69,11 +72,8 @@ public class ViewPanel {
         
       
         
-        
         GridBagConstraints constraints = getConstraints();
 
-        
-        
         ButtonGroup g = new ButtonGroup();
         g.add(yearsButton);
         g.add(monthsButton);
@@ -81,6 +81,17 @@ public class ViewPanel {
         g.add(hoursButton);
         g.add(minutesButton);
         g.add(secondsButton);
+        if(prev != null) 
+        {
+        	yearsButton = prev.yearsButton;
+        	monthsButton = prev.monthsButton;
+        	daysOfWeekButton = prev.daysOfWeekButton;
+        	hoursButton = prev.hoursButton;
+        	minutesButton = prev.minutesButton;
+        	secondsButton = prev.secondsButton;
+       	}
+        else yearsButton.setSelected(true);
+
        
         
 
@@ -150,7 +161,7 @@ public class ViewPanel {
         
         Border line2 = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         TitledBorder border2 = BorderFactory.createTitledBorder(line2,
-        		"Select data to include...",
+        		"Select data to include, by...",
         		TitledBorder.LEFT,
         		TitledBorder.TOP);
         listPanel.setBorder( border2);
@@ -161,13 +172,25 @@ public class ViewPanel {
         panel.add(listPanel, constraints);
         
         
-        
-        addYearList(listPanel);
-        addMonthsList(listPanel);
-        addDaysList(listPanel);
-        addHoursList(listPanel);
-        addMinutesList(listPanel);
-        addSecondsList(listPanel);
+        int[] selected = new int[] {0};
+        if(prev==null)
+        {
+        	addYearList(listPanel,selected);
+        	addMonthsList(listPanel, selected);
+        	addDaysList(listPanel, selected);
+        	addHoursList(listPanel, selected);
+        	addMinutesList(listPanel, selected);
+        	addSecondsList(listPanel, selected);
+        }
+        else
+        {
+        	addYearList(listPanel,prev.yearList.getSelectedIndices());
+        	addMonthsList(listPanel, prev.monthList.getSelectedIndices());
+        	addDaysList(listPanel, prev.dayList.getSelectedIndices());
+        	addHoursList(listPanel, prev.hourList.getSelectedIndices());
+        	addMinutesList(listPanel, prev.minuteList.getSelectedIndices());
+        	addSecondsList(listPanel, prev.secondList.getSelectedIndices());
+        }
         
         
         constraints.gridx = 0;
@@ -205,25 +228,43 @@ public class ViewPanel {
 	{
 		GridBagConstraints c = new GridBagConstraints();
 		String[] choices = new String[2];
-		choices[0] = "Graph 1 (top)";
-		choices[1] = "Graph 2 (bottom)";
-		JComboBox box = new JComboBox(choices);
-			
-		if(title.indexOf("1") != -1)
-			box.setSelectedIndex(0);
-		else if(title.indexOf("2") != -1)
-			box.setSelectedIndex(1);
+		choices[0] = "Top Graph";
+		choices[1] = "Bottom Graph";
 		
-		box.addActionListener(new SwitchSidePanelAction(m));
+		JButton graph1 = new JButton(choices[0]);
+		JButton graph2 = new JButton(choices[1]);
+		
+		if(title.indexOf("1") != -1)
+		{
+			graph1.setEnabled(false);
+			graph2.addActionListener(new SwitchSidePanelAction(m));
+		}
+		else if(title.indexOf("2") != -1)
+		{
+			graph2.setEnabled(false);
+			graph1.addActionListener(new SwitchSidePanelAction(m));
+		}
+		
+		JPanel wrapper = new JPanel();
+		
+		wrapper.setLayout(new GridBagLayout());
+		wrapper.setBackground(this.c);
+		c.gridx = 0;
+		c.gridy = 1;
+		wrapper.add(graph1, c);
+		c.gridx = 1;
+		wrapper.add(graph2,c);
+		
 		
 		c.gridx = 0;
 		c.gridy = offset++;
 		c.insets = new Insets(0,10,0,10);
-		panel.add(box,c);
+		panel.add(wrapper, c);
+		
 	}
 	
 	
-	public void addSecondsList(JPanel panel)
+	public void addSecondsList(JPanel panel, int[] ind)
 	{
 		String[] sec = new String[range.seconds.length+1];
 		sec[0] = "Select all";
@@ -233,9 +274,6 @@ public class ViewPanel {
 		}
 		JList list = new JList(sec);
 		list.setVisibleRowCount(7);
-
-		int[] ind = new int[1];
-		ind[0] = 0;
 		list.setSelectedIndices(ind);
 		secondList = list;
 		JScrollPane sp = new JScrollPane(list);
@@ -256,7 +294,7 @@ public class ViewPanel {
 	}
 	
 	
-	public void addMinutesList(JPanel panel)
+	public void addMinutesList(JPanel panel, int[] ind)
 	{
 		String[] min = new String[range.minutes.length+1];
 		min[0] = "Select all";
@@ -267,8 +305,6 @@ public class ViewPanel {
 		JList list = new JList(min);
 		list.setVisibleRowCount(7);
 
-		int[] ind = new int[1];
-		ind[0] = 0;
 		list.setSelectedIndices(ind);
 		minuteList = list;
 		JScrollPane sp = new JScrollPane(list);
@@ -292,7 +328,7 @@ public class ViewPanel {
 	}
 	
 	
-	public void addHoursList(JPanel panel)
+	public void addHoursList(JPanel panel, int[] ind)
 	{
 		String[] hrs = new String[range.hours.length+1];
 		hrs[0] = "Select all";
@@ -303,8 +339,6 @@ public class ViewPanel {
 		JList list = new JList(hrs);
 		list.setVisibleRowCount(7);
 
-		int[] ind = new int[1];
-		ind[0] = 0;
 		list.setSelectedIndices(ind);
 		hourList = list;
 		JScrollPane sp = new JScrollPane(list);
@@ -327,7 +361,7 @@ public class ViewPanel {
 	}
 	
 	
-	public void addDaysList(JPanel panel)
+	public void addDaysList(JPanel panel, int[] ind)
 	{
 		String[] days = new String[range.daysOfWeek.length+1];
 		days[0] = "Select all";
@@ -338,8 +372,6 @@ public class ViewPanel {
 		JList list = new JList(days);
 		list.setVisibleRowCount(7);
 
-		int[] ind = new int[1];
-		ind[0] = 0;
 		list.setSelectedIndices(ind);
 		dayList = list;
 		JScrollPane sp = new JScrollPane(list);
@@ -364,7 +396,7 @@ public class ViewPanel {
 	}
 	
 	
-	public void addMonthsList(JPanel panel)
+	public void addMonthsList(JPanel panel, int[] ind)
 	{
 		String[] mos = new String[range.months.length+1];
 		mos[0] = "Select all";
@@ -375,8 +407,6 @@ public class ViewPanel {
 		JList list = new JList(mos);
 		list.setVisibleRowCount(7);
 
-		int[] ind = new int[1];
-		ind[0] = 0;
 		list.setSelectedIndices(ind);
 		monthList = list;
 		JScrollPane sp = new JScrollPane(list);
@@ -399,9 +429,12 @@ public class ViewPanel {
 	}
 	
 	
-	public void addYearList(JPanel panel)
+	public void addYearList(JPanel panel, int[] ind)
 	{
-		String[] yrs = new String[range.years.length+1];
+		String[] yrs = null;
+		
+		if(range.years==null) yrs = new String[1];
+		else yrs = new String[range.years.length+1];
 		int year = range.minYear;
 		yrs[0] = "Select all";
 		for(int i = 1; i < yrs.length; i++)
@@ -412,8 +445,6 @@ public class ViewPanel {
 		JList list = new JList(yrs);
 		
 		list.setVisibleRowCount(7);
-		int[] ind = new int[1];
-		ind[0] = 0;
 		list.setSelectedIndices(ind);
 		yearList = list;
 		JScrollPane sp = new JScrollPane(list);
@@ -431,7 +462,9 @@ public class ViewPanel {
 		
 		c.gridy = 2;
 		panel.add(sp, c);
+		
 	}
+	
 
 	public GridBagConstraints getConstraints()
 	{
@@ -532,7 +565,7 @@ public class ViewPanel {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
 		c.insets = new Insets(10,10,0,10);
-		yearsButton.setSelected(true);
+		//yearsButton.setSelected(true);
 		yearsButton.setBackground(this.c);
 		yearsButton.addActionListener(new ViewSelectAction(yearsButton, range, DateRange.Grouping.YEARS));
 		panel.add(yearsButton, c);

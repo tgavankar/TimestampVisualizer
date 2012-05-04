@@ -15,17 +15,25 @@ public class ClickChartAction implements ChartMouseListener{
 	MasterPanel panel;
 	int chartNum;
 	
-	public ClickChartAction(DateRange range, MasterPanel panel)
+	public ClickChartAction(DateRange range, MasterPanel panel, int chartNum)
 	{
 		this.range = range;
 		this.panel = panel;
-		//chartNum = n;
+		this.chartNum = chartNum;
 	}
 	
 	
 	public void chartMouseClicked(ChartMouseEvent arg0) {
 		String col = getColEntity(arg0.getEntity().toString());
-		if(null == col) return;
+		
+		if(chartNum != 0)
+			panel.sidePanel = chartNum;
+		
+		if(null == col) 
+		{
+			panel.redraw();
+			return;
+		}
 		
 		switch(range.g)
 		{
