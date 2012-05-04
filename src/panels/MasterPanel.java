@@ -18,6 +18,11 @@ import javax.swing.JRadioButtonMenuItem;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.TickUnits;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
@@ -374,6 +379,12 @@ public class MasterPanel extends ApplicationFrame
 		chart.setBorderStroke(new BasicStroke(3));
 		chart.setBorderVisible(true);
 		chart.getPlot().setInsets(new RectangleInsets(0,0,10,0));
+		
+		CategoryAxis xAxis = chart.getCategoryPlot().getDomainAxis();
+		xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+		
+		ValueAxis yAxis = chart.getCategoryPlot().getRangeAxis();
+		yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		
 		BarRenderer br = new BarRenderer();
 		br.setItemMargin(0.0);
