@@ -437,6 +437,12 @@ public class DateRange {
 		sb.setLength(sb.length()-2);
 		sb.append("\n");
 	
+		if(regex != null && !regex.equals("")) {
+			sb.append("Filename Filtering Regex: ");
+			sb.append(regex);
+			sb.append("\n");
+		}
+		
 		
 		return sb.toString();
 	}
