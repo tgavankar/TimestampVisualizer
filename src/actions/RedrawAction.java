@@ -44,9 +44,9 @@ public class RedrawAction implements ActionListener{
 			
 			// No input file loaded
 			if(dr.years == null) {
-				JPanel exportCompletePanel = new JPanel();
-				exportCompletePanel.add(new JLabel("No files loaded"));
-				JOptionPane.showConfirmDialog(null, exportCompletePanel, "No Files Loaded", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+				JPanel msgPanel = new JPanel();
+				msgPanel.add(new JLabel("No files loaded"));
+				JOptionPane.showConfirmDialog(null, msgPanel, "No Files Loaded", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
@@ -186,9 +186,9 @@ public class RedrawAction implements ActionListener{
 					Pattern.compile(dr.regex);
 				}
 				catch(PatternSyntaxException p) {
-					JPanel exportCompletePanel = new JPanel();
-					exportCompletePanel.add(new JLabel("Invalid regex: " + p.toString()));
-					JOptionPane.showConfirmDialog(null, exportCompletePanel, "Invalid Regex", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+					JPanel msgPanel = new JPanel();
+					msgPanel.add(new JLabel("Invalid regex: " + p.toString()));
+					JOptionPane.showConfirmDialog(null, msgPanel, "Invalid Regex", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 			}
