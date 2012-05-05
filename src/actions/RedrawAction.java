@@ -184,7 +184,6 @@ public class RedrawAction implements ActionListener{
 				JOptionPane pop = new JOptionPane();
 				String message = "Invalid regex string!";
 				JOptionPane.showMessageDialog(pop, message, "Error", JOptionPane.PLAIN_MESSAGE);
-				pane.regex.setText("");
 				return;
 
 			}

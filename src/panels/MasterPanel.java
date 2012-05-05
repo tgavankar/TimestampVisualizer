@@ -548,7 +548,8 @@ public class MasterPanel extends ApplicationFrame
 		title = "Regex";
 		item = new JMenuItem("Regex Info");
 		text = "Enter a regular expression representing which files to include. \n\n" +
-				"RegEx Help: \n" +
+				"Any regular expression supported by Java can be used here. \n\n" +
+				"RegEx Help Examples: \n" +
 				". \t matches any character except a newline\n" +
 				"* \t match 0 or more times\n" +
 				"+ \t match 1 or more times\n" +
