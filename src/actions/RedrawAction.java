@@ -2,6 +2,13 @@ package actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import panels.MasterPanel;
 import panels.ViewPanel;
@@ -37,6 +44,9 @@ public class RedrawAction implements ActionListener{
 			
 			// No input file loaded
 			if(dr.years == null) {
+				JPanel exportCompletePanel = new JPanel();
+				exportCompletePanel.add(new JLabel("No files loaded"));
+				JOptionPane.showConfirmDialog(null, exportCompletePanel, "No Files Loaded", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
@@ -172,6 +182,15 @@ public class RedrawAction implements ActionListener{
 			//Filter by filename regex...
 			if(pane.regex.getText() != null && !pane.regex.getText().equals("")) {
 				dr.regex = pane.regex.getText();
+				try {
+					Pattern.compile(dr.regex);
+				}
+				catch(PatternSyntaxException p) {
+					JPanel exportCompletePanel = new JPanel();
+					exportCompletePanel.add(new JLabel("Invalid regex: " + p.toString()));
+					JOptionPane.showConfirmDialog(null, exportCompletePanel, "Invalid Regex", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 			}
 			else {
 				dr.regex = null;

@@ -4,6 +4,7 @@ package visualize;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.PatternSyntaxException;
 
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -89,7 +90,12 @@ public class DateRange {
 						
 				if(years != null && !years[file.getYear()-minYear]) continue;
 						
-				if(regex != null && !file.getName().matches(regex)) continue;
+				try {
+					if(regex != null && !file.getName().matches(regex)) continue;
+				}
+				catch(PatternSyntaxException p) {
+					
+				}
 				
 				//if everything is valid, then add to filtered
 				filtered.get(i).add(file);
