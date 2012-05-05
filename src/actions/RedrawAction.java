@@ -5,10 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import panels.MasterPanel;
 import panels.ViewPanel;
@@ -43,12 +40,8 @@ public class RedrawAction implements ActionListener{
 			}
 			
 			// No input file loaded
-			if(dr.years == null) {
-				JPanel msgPanel = new JPanel();
-				msgPanel.add(new JLabel("No files loaded"));
-				JOptionPane.showConfirmDialog(null, msgPanel, "No Files Loaded", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+			if(dr.years == null) 
 				return;
-			}
 			
 			// Filter years down...
 			if(pane.yearList.getSelectedIndex() != 0)
@@ -185,11 +178,15 @@ public class RedrawAction implements ActionListener{
 				try {
 					Pattern.compile(dr.regex);
 				}
-				catch(PatternSyntaxException p) {
-					JPanel msgPanel = new JPanel();
-					msgPanel.add(new JLabel("Invalid regex: " + p.toString()));
-					JOptionPane.showConfirmDialog(null, msgPanel, "Invalid Regex", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+				catch(PatternSyntaxException p) 
+				{
+					
+					JOptionPane pop = new JOptionPane();
+					String message = "Invalid regex string!";
+					JOptionPane.showMessageDialog(pop, message, "Error", JOptionPane.PLAIN_MESSAGE);
+					pane.regex.setText("");
 					return;
+					
 				}
 			}
 			else {

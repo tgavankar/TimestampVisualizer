@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import visualize.DateRange;
@@ -271,7 +270,7 @@ public class ViewPanel {
 	public void addRegexBox(JPanel panel, String prev)
 	{
 		JTextField re = new JTextField(10);
-	
+		re.setText(prev);
 		regex = re;
 		
 		GridBagConstraints c = new GridBagConstraints();
