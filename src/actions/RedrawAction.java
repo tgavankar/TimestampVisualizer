@@ -35,6 +35,11 @@ public class RedrawAction implements ActionListener{
 				dr = panel.view[2];
 			}
 			
+			// No input file loaded
+			if(dr.years == null) {
+				return;
+			}
+			
 			// Filter years down...
 			if(pane.yearList.getSelectedIndex() != 0)
 			{
