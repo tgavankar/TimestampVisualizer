@@ -49,7 +49,7 @@ public class MasterPanel extends ApplicationFrame
 	//dimensions for various parts of the panel
 	Dimension singleChartD = new Dimension(800, 600);
 	Dimension dualChartD = new Dimension(800, 300);
-	public Dimension sideDimension = new Dimension(300,600);
+	public Dimension sideDimension = new Dimension(400,600);
 	
 	//represents which side panel to show
 	public int sidePanel = 0; 
